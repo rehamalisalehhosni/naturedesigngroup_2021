@@ -1,5 +1,5 @@
 @if(isset($data))
-{{ Form::hidden('projects_translations_id_'.$locale, $data->projects_translations_id) }}
+  {{ Form::hidden('projects_translations_id_'.$locale, $data->projects_translations_id) }}
 @endif
 <div class="col-xs-12 col-sm-12 col-md-12">
   <div class="form-group">
@@ -68,11 +68,11 @@
 </div>
 
 @if (isset($data) && $data->main_image)
-<div class="col-xs-12 col-sm-12 col-md-12">
-  <div class="form-group">
-    <img src="{{url('/Uploads/projects/'.$locale.'/'.$data->main_image)}}" alt="" class="img-thumbnail img_view" />
+  <div class="col-xs-12 col-sm-12 col-md-12">
+    <div class="form-group">
+      <img src="{{url('/Uploads/projects/'.$locale.'/'.$data->main_image)}}" alt="" class="img-thumbnail img_view" />
+    </div>
   </div>
-</div>
 @endif
 <div class="col-xs-12 col-sm-12 col-md-12">
   <div class="form-group">
@@ -80,40 +80,95 @@
     {!! Form::file('main_image_'.$locale, null, array('placeholder' => 'Image','class' => 'form-control')) !!}
   </div>
 </div>
-@if (isset($data) && $data->ProjectsImages)
-<div class="col-xs-12 col-sm-12 col-md-12">
-  <div class="form-group">
-    @foreach($data->ProjectsImages as  $image)
-    <div class="imgsProjects lis" id="{{$image->projects_images_id}}" >
-      <i class="fa fa-trash-o" aria-hidden="true"></i>
-      <img src="{{url('/Uploads/projects/project_images/'. $image->image)}}" alt="" class="img-thumbnail img_view" />
+@if (isset($data) && $data->logo)
+  <div class="col-xs-12 col-sm-12 col-md-12">
+    <div class="form-group">
+      <img src="{{url('/Uploads/projects/logo/'.$locale.'/'.$data->logo)}}" alt="" class="img-thumbnail img_view" />
     </div>
-    @endforeach
   </div>
-</div>
 @endif
 <div class="col-xs-12 col-sm-12 col-md-12">
   <div class="form-group">
-    <strong>  Images :</strong>
-    {!! Form::file('images_'.$locale.'[]',  ['multiple' => 'multiple'], array('placeholder' => 'images','class' => 'form-control')) !!}
+    <strong> Logo	 :</strong>
+    {!! Form::file('logo_'.$locale, null, array('placeholder' => 'Logo','class' => 'form-control')) !!}
   </div>
 </div>
-@if (isset($data) && $data->ProjectsPlans)
 <div class="col-xs-12 col-sm-12 col-md-12">
   <div class="form-group">
-    @foreach($data->ProjectsPlans as  $image)
-    <div class="imgsPlan lis" id="{{$image->projects_plans_id}}" >
-      <i class="fa fa-trash-o" aria-hidden="true"></i>
-      <img src="{{url('/Uploads/projects/projects_plans/'. $image->image)}}" alt="" class="img-thumbnail img_view" />
-    </div>
-    @endforeach
+    <strong>Logo Title:</strong>
+    <?php
+    if(isset($data)&&$data->logo_title){
+      $logo_title=$data->logo_title;
+    }else{
+      $logo_title=null;
+    }
+    ?>
+    {!! Form::text('logo_title_'.$locale, $logo_title , array('placeholder' => 'Logo Tile','class' => 'form-control')) !!}
   </div>
 </div>
-@endif
 <div class="col-xs-12 col-sm-12 col-md-12">
   <div class="form-group">
-    <strong>  Plans :</strong>
-    {!! Form::file('plans_'.$locale.'[]',  ['multiple' => 'multiple'], array('placeholder' => 'images','class' => 'form-control')) !!}
+    <strong>Logo Sub Title:</strong>
+    <?php
+    if(isset($data)&&$data->logo_subtitle){
+      $logo_subtitle=$data->logo_subtitle;
+    }else{
+      $logo_subtitle=null;
+    }
+    ?>
+    {!! Form::text('logo_subtitle_'.$locale, $logo_subtitle, array('placeholder' => 'Logo Sub Title','class' => 'form-control')) !!}
+  </div>
+</div>
+<div class="col-xs-12 col-sm-12 col-md-12">
+  <div class="form-group">
+    <strong>Owner	:</strong>
+    <?php
+    if(isset($data)&&$data->owner){
+      $owner=$data->owner	;
+    }else{
+      $owner=null;
+    }
+    ?>
+    {!! Form::text('owner_'.$locale, $owner	 , array('placeholder' => 'Owner','class' => 'form-control')) !!}
+  </div>
+</div>
+<div class="col-xs-12 col-sm-12 col-md-12">
+  <div class="form-group">
+    <strong>Year:</strong>
+    <?php
+    if(isset($data)&&$data->year){
+      $year=$data->year	;
+    }else{
+      $year=null;
+    }
+    ?>
+    {!! Form::text('year_'.$locale, $year, array('placeholder' => 'Year','class' => 'form-control')) !!}
+  </div>
+</div>
+<div class="col-xs-12 col-sm-12 col-md-12">
+  <div class="form-group">
+    <strong>Build up:</strong>
+    <?php
+    if(isset($data)&&$data->build_up){
+      $build_up=$data->build_up	;
+    }else{
+      $build_up=null;
+    }
+    ?>
+    {!! Form::text('build_up_'.$locale, $year	 , array('placeholder' => 'Build up','class' => 'form-control')) !!}
+  </div>
+</div>
+<div class="col-xs-12 col-sm-12 col-md-12">
+  <div class="form-group">
+    <strong>Area:</strong>
+    <?php
+    if(isset($data)&&$data->area){
+      $area=$data->area	;
+    }else{
+      $area=null;
+    }
+    ?>
+    {!! Form::text('area_'.$locale, $area	 , array('placeholder' => 'Area','class' => 'form-control')) !!}
   </div>
 </div>
 
@@ -200,15 +255,15 @@ if(isset($data)&&$data->presentation){
   </div>
 </div>
 <div class="col-xs-12 col-sm-12 col-md-12">
-<div class="form-group">
-  <?php
-  if(isset($data)&&$data->projects_category_id){
-    $projects_category_id=$data->projects_category_id;
-  }else{
-    $projects_category_id=null;
-  }
-  ?>
-  <strong> Projects Category :</strong>
-  {!! Form::select('projects_category_id_'.$locale, $projectsCategory,$projects_category_id,['class' => 'form-control']) !!}
-</div>
+  <div class="form-group">
+    <?php
+    if(isset($data)&&$data->projects_category_id){
+      $projects_category_id=$data->projects_category_id;
+    }else{
+      $projects_category_id=null;
+    }
+    ?>
+    <strong> Projects Category :</strong>
+    {!! Form::select('projects_category_id_'.$locale, $projectsCategory,$projects_category_id,['class' => 'form-control']) !!}
+  </div>
 </div>

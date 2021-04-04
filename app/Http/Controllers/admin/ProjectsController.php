@@ -39,7 +39,7 @@ class ProjectsController extends Controller
   */
   public function create()
   {
-    $projectsCategory= ProjectsCategory::where('parent','!=','0')->lists('title','projects_category_id');
+    $projectsCategory= ProjectsCategory::where('parent','!=','0')->pluck('title','projects_category_id');
     $languages=Languages::all();
     return view('Backend/Projects.create',compact('projectsCategory','languages'));
 
@@ -53,21 +53,27 @@ class ProjectsController extends Controller
   */
   public function setDatMain($request,$lang)
   {
-
     $this->validate($request, [
       'title_'.$lang => 'required',
       'projects_category_id_'.$lang => 'required',
       'description_'.$lang => 'required',
       'main_image_'.$lang => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+      'logo_'.$lang => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
     ]);
     $projects = new Projects;
     $projects->show_home =  $request->input('show_home_'.$lang);
     $projects->publish =  $request->input('publish_'.$lang);
-    $projects->sort = $request->input('sort_'.$lang);
+    $projects->sort = (int)$request->input('sort_'.$lang);
     $projects->projects_category_id =  $request->input('projects_category_id_'.$lang);
     $projects->title = $request->input('title_'.$lang);
     $projects->gallary = $request->input('gallary_'.$lang);
     $projects->description =  $request->input('description_'.$lang);
+    $projects->logo_title =  $request->input('logo_title_'.$lang);
+    $projects->logo_subtitle =  $request->input('logo_subtitle_'.$lang);
+    $projects->year =  $request->input('year_'.$lang);
+    $projects->area =  $request->input('area_'.$lang);
+    $projects->owner =  $request->input('owner_'.$lang);
+    $projects->build_up =  $request->input('build_up_'.$lang);
     if($file = $request->hasFile('main_image_'.$lang)) {
       $file = $request->file('main_image_'.$lang) ;
       $extension = $file->getClientOriginalExtension();
@@ -81,10 +87,24 @@ class ProjectsController extends Controller
       $file->move($destinationPath,$fileName);
       $projects->main_image = $fileName ;
     }
+    if($file = $request->hasFile('logo_'.$lang)) {
+      $file = $request->file('logo_'.$lang) ;
+      $extension = $file->getClientOriginalExtension();
+      $fileName =explode('.', $file->getClientOriginalName())[0].time().'.'.$extension;
+      $fileName = str_replace(' ', '', $fileName);
+      //$fileName = $file->getClientOriginalName() ;
+      $destinationPath = public_path().'/Uploads/projects/logo/'.$lang ;
+      if (!file_exists($destinationPath)) {
+        mkdir($destinationPath, 0777, true);
+      }
+      $file->move($destinationPath,$fileName);
+      $projects->logo = $fileName ;
+    }
     $projects->save() ;
 
     return $projects;
   }
+
   public function setDataLanguage($request,$lang,$data)
   {
     $projectsTranslation = new ProjectsTranslation;
@@ -92,7 +112,7 @@ class ProjectsController extends Controller
 
     $projectsTranslation->show_home =  $request->input('show_home_'.$lang);
     $projectsTranslation->publish =  $request->input('publish_'.$lang);
-    $projectsTranslation->sort = $request->input('sort_'.$lang);
+    $projectsTranslation->sort = (int)$request->input('sort_'.$lang);
     $projectsTranslation->projects_category_id =  $request->input('projects_category_id_'.$lang);
     $projectsTranslation->description =  $request->input('description_'.$lang);
     $projectsTranslation->title = $request->input('title_'.$lang);
@@ -100,6 +120,12 @@ class ProjectsController extends Controller
     $projectsTranslation->video = $request->input('video_'.$lang);
     $projectsTranslation->clients= $request->input('clients_'.$lang);
     $projectsTranslation->status= $request->input('status_'.$lang);
+    $projectsTranslation->logo_title =  $request->input('logo_title_'.$lang);
+    $projectsTranslation->logo_subtitle =  $request->input('logo_subtitle_'.$lang);
+    $projectsTranslation->year =  $request->input('year_'.$lang);
+    $projectsTranslation->owner =  $request->input('owner_'.$lang);
+    $projectsTranslation->area =  $request->input('area_'.$lang);
+    $projectsTranslation->build_up =  $request->input('build_up_'.$lang);
     $projectsTranslation->location= $request->input('location_'.$lang);
     $projectsTranslation->gallary= $request->input('gallary_'.$lang);
     if($file = $request->hasFile('main_image_'.$lang)) {
@@ -121,6 +147,26 @@ class ProjectsController extends Controller
         $projectsTranslation->main_image=$fileName ;
       }
     }
+    if($file = $request->hasFile('logo_'.$lang)) {
+      $file = $request->file('logo_'.$lang) ;
+      $extension = $file->getClientOriginalExtension();
+      $fileName =explode('.', $file->getClientOriginalName())[0].time().'.'.$extension;
+      $fileName = str_replace(' ', '', $fileName);
+      //$fileName = $file->getClientOriginalName() ;
+      $destinationPath = public_path().'/Uploads/projects/logo/'.$lang ;
+      if (!file_exists($destinationPath)) {
+        mkdir($destinationPath, 0777, true);
+      }
+      $Languages=Languages::get()[0];
+
+      if($lang==$Languages->code){
+        $projectsTranslation->logo=$data->logo;
+      }else{
+        $file->move($destinationPath,$fileName);
+        $projectsTranslation->logo=$fileName ;
+      }
+    }
+
     $projectsTranslation->projects_id=$data->projects_id;
     $projectsTranslation->locale=$lang;
 
@@ -235,7 +281,7 @@ class ProjectsController extends Controller
   {
     $languages=Languages::all();
     $item = Projects::find($id);
-    $projectsCategory= ProjectsCategory::where('parent','!=','0')->lists('title','projects_category_id');
+    $projectsCategory= ProjectsCategory::where('parent','!=','0')->pluck('title','projects_category_id');
     return view('Backend/Projects.edit',compact('item','projectsCategory','languages'));
   }
 
@@ -259,7 +305,7 @@ class ProjectsController extends Controller
     $projects=Projects::find($id);
     $projects->show_home =  $request->input('show_home_'.$lang);
     $projects->publish =  $request->input('publish_'.$lang);
-    $projects->sort = $request->input('sort_'.$lang);
+    $projects->sort = (int)$request->input('sort_'.$lang);
     $projects->projects_category_id =  $request->input('projects_category_id_'.$lang);
     $projects->description =  $request->input('description_'.$lang);
     $projects->title = $request->input('title_'.$lang);
@@ -269,6 +315,25 @@ class ProjectsController extends Controller
     $projects->status= $request->input('status_'.$lang);
     $projects->location= $request->input('location_'.$lang);
     $projects->gallary= $request->input('gallary_'.$lang);
+    $projects->logo_title =  $request->input('logo_title_'.$lang);
+    $projects->logo_subtitle =  $request->input('logo_subtitle_'.$lang);
+    $projects->year =  $request->input('year_'.$lang);
+    $projects->area =  $request->input('area_'.$lang);
+    $projects->owner =  $request->input('owner_'.$lang);
+    $projects->build_up =  $request->input('build_up_'.$lang);
+    if($file = $request->hasFile('logo_'.$lang)) {
+      $file = $request->file('logo_'.$lang) ;
+      $extension = $file->getClientOriginalExtension();
+      $fileName =explode('.', $file->getClientOriginalName())[0].time().'.'.$extension;
+      $fileName = str_replace(' ', '', $fileName);
+      //$fileName = $file->getClientOriginalName() ;
+      $destinationPath = public_path().'/Uploads/projects/logo/'.$lang ;
+      if (!file_exists($destinationPath)) {
+        mkdir($destinationPath, 0777, true);
+      }
+      $file->move($destinationPath,$fileName);
+      $projects->logo = $fileName ;
+    }
 
     if($file = $request->hasFile('main_image_'.$lang)) {
       $file = $request->file('main_image_'.$lang) ;
@@ -300,7 +365,7 @@ class ProjectsController extends Controller
 
     $projectsTranslation->show_home =  $request->input('show_home_'.$lang);
     $projectsTranslation->publish =  $request->input('publish_'.$lang);
-    $projectsTranslation->sort = $request->input('sort_'.$lang);
+    $projectsTranslation->sort = (int)$request->input('sort_'.$lang);
     $projectsTranslation->projects_category_id =  $request->input('projects_category_id_'.$lang);
     $projectsTranslation->description =  $request->input('description_'.$lang);
     $projectsTranslation->title = $request->input('title_'.$lang);
@@ -310,6 +375,25 @@ class ProjectsController extends Controller
     $projectsTranslation->status= $request->input('status_'.$lang);
     $projectsTranslation->location= $request->input('location_'.$lang);
     $projectsTranslation->gallary= $request->input('gallary_'.$lang);
+    $projectsTranslation->owner= $request->input('owner_'.$lang);
+    $projectsTranslation->logo_title =  $request->input('logo_title_'.$lang);
+    $projectsTranslation->logo_subtitle =  $request->input('logo_subtitle_'.$lang);
+    $projectsTranslation->year =  $request->input('year_'.$lang);
+    $projectsTranslation->area =  $request->input('area_'.$lang);
+    $projectsTranslation->build_up =  $request->input('build_up_'.$lang);
+    if($file = $request->hasFile('logo_'.$lang)) {
+      $file = $request->file('logo_'.$lang) ;
+      $extension = $file->getClientOriginalExtension();
+      $fileName =explode('.', $file->getClientOriginalName())[0].time().'.'.$extension;
+      $fileName = str_replace(' ', '', $fileName);
+      //$fileName = $file->getClientOriginalName() ;
+      $destinationPath = public_path().'/Uploads/projects/logo/'.$lang ;
+      if (!file_exists($destinationPath)) {
+        mkdir($destinationPath, 0777, true);
+      }
+      $file->move($destinationPath,$fileName);
+      $projectsTranslation->logo = $fileName ;
+    }
 
     if($file = $request->hasFile('main_image_'.$lang)) {
       $file = $request->file('main_image_'.$lang) ;

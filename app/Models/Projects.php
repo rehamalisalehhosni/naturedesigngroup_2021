@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\ProjectsTranslation;
 
-/**
-* Class Projects
-*/
+
+
+
 class Projects extends Model
 {
     protected $table = 'projects';
@@ -20,6 +20,12 @@ class Projects extends Model
         'title',
         'description',
         'main_image',
+        'logo',
+        'logo_title',
+        'logo_subtitle',
+        'year',
+        'area',
+        'build_up',
         'show_home',
         'publish',
         'gallary',
