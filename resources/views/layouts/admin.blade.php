@@ -45,6 +45,8 @@
             <li><a href="{{ route('newsletter.index') }}" class="{{ Request::segment(2) === 'newsletter' ? 'active' : '' }}" > <i class="lnr lnr-envelope"></i><span>Newsletter</span></a></li>
             <li><a href="{{ route('services.index') }}" class="{{ Request::segment(2) === 'services' ? 'active' : '' }}" > <i class="lnr lnr-magic-wand"></i><span>Services</span></a></li>
             <li><a href="{{ route('pages.index') }}" class="{{ Request::segment(2) === 'pages' ? 'active' : '' }}" > <i class="lnr lnr-magic-wand"></i><span>Pages Banner</span></a></li>
+            <li><a href="{{ route('offices.index') }}" class="{{ Request::segment(2) === 'offices' ? 'active' : '' }}" > <i class="lnr lnr-magic-wand"></i><span>Offices</span></a></li>
+            <li><a href="{{ route('ourPeople.index') }}" class="{{ Request::segment(2) === 'ourPeople' ? 'active' : '' }}" > <i class="lnr lnr-magic-wand"></i><span>Our People</span></a></li>
             <li>
               <a href="#Projects" data-toggle="collapse" class="collapsed"><i class="lnr lnr-file-empty"></i> <span>Projects</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
               <div id="Projects" class="collapse ">

@@ -136,5 +136,25 @@ Route::group(['prefix' => 'adminControl',  'middleware' => 'auth'], function()
 	Route::patch('projects/{id}', ['as' => 'projects.update', 'uses' => 'admin\ProjectsController@update']);
 	Route::delete('projects/{id}', ['as' => 'projects.destroy', 'uses' => 'admin\ProjectsController@destroy']);
 	Route::post('projects/deleteProjectsImages', ['as' => 'projects.deleteProjectsImages', 'uses' => 'admin\ProjectsController@deleteProjectsImages']);
-	Route::post('projects/deleteProjectsPlans', ['as' => 'projects.deleteProjectsPlans', 'uses' => 'admin\ProjectsController@deleteProjectsPlans']);
+  Route::post('projects/deleteProjectsPlans', ['as' => 'projects.deleteProjectsPlans', 'uses' => 'admin\ProjectsController@deleteProjectsPlans']);
+  
+  /////////Offices ///////////
+  Route::get('offices', ['as' => 'offices.index', 'uses' => 'admin\OfficesController@index']);
+  Route::get('offices/create', ['as' => 'offices.create', 'uses' => 'admin\OfficesController@create']);
+  Route::post('offices/create', ['as' => 'offices.store', 'uses' => 'admin\OfficesController@store']);
+  Route::get('offices/{id}', ['as' => 'offices.show', 'uses' => 'admin\OfficesController@show']);
+  Route::get('offices/{id}/edit', ['as' => 'offices.edit', 'uses' => 'admin\OfficesController@edit']);
+  Route::patch('offices/{id}', ['as' => 'offices.update', 'uses' => 'admin\OfficesController@update']);
+  Route::delete('offices/{id}', ['as' => 'offices.destroy', 'uses' => 'admin\OfficesController@destroy']);
+
+  /////////Our People ///////////
+  Route::get('ourPeople', ['as' => 'ourPeople.index', 'uses' => 'admin\OurPeopleController@index']);
+  Route::get('ourPeople/create', ['as' => 'ourPeople.create', 'uses' => 'admin\OurPeopleController@create']);
+  Route::post('ourPeople/create', ['as' => 'ourPeople.store', 'uses' => 'admin\OurPeopleController@store']);
+  Route::get('ourPeople/{id}', ['as' => 'ourPeople.show', 'uses' => 'admin\OurPeopleController@show']);
+  Route::get('ourPeople/{id}/edit', ['as' => 'ourPeople.edit', 'uses' => 'admin\OurPeopleController@edit']);
+  Route::patch('ourPeople/{id}', ['as' => 'ourPeople.update', 'uses' => 'admin\OurPeopleController@update']);
+  Route::delete('ourPeople/{id}', ['as' => 'ourPeople.destroy', 'uses' => 'admin\OurPeopleController@destroy']);
+
+
 });
